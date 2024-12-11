@@ -135,7 +135,14 @@ class CustomTextField extends StatelessWidget {
                           color: Colors.grey,
                         ),
                       )
-                    : null,
+                    : const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                        borderSide: BorderSide(
+                          color: Colors.white,
+                        ),
+                      ),
                 // border: InputBorder.none,
                 suffixText: suffixText,
                 suffixIcon: suffixWidget,

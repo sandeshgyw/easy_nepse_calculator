@@ -1,10 +1,22 @@
-import 'package:easy_nepse_calculator/constants/theme.dart';
+import 'package:easy_nepse_calculator/providers/calculation_provider.dart';
+import 'package:easy_nepse_calculator/providers/theme_provider.dart';
 import 'package:easy_nepse_calculator/screens/home_screen.dart';
+import 'package:easy_nepse_calculator/services/hive.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-Themes currentTheme = Themes.darkThemeSoftGray;
-void main() {
-  runApp(const MyApp());
+void main() async {
+  await hive.init();
+  runApp(
+    MultiProvider(providers: [
+      ChangeNotifierProvider(
+        create: (_) => ThemeProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => CalculationProvider(),
+      ),
+    ], child: const MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -12,12 +24,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeProvider _themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: getCurrentTheme(currentTheme),
-      // theme: ThemeData.dark(),
-      home: const MyHomePage(title: 'Easy Share Calculator'),
+      theme: _themeProvider.isDarkMode
+          ? ThemeData.dark()!.copyWith(
+              scaffoldBackgroundColor: Colors.black,
+            )
+          : ThemeData.light(),
+      home: const MyHomePage(title: 'Calculator'),
     );
   }
 }
