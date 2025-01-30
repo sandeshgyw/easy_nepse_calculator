@@ -1,10 +1,45 @@
 import 'package:easy_nepse_calculator/enums/transaction_type.dart';
+import 'package:easy_nepse_calculator/mixins/localization.dart';
 import 'package:easy_nepse_calculator/models/buy_calculation.dart';
+import 'package:easy_nepse_calculator/services/hive.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localization/flutter_localization.dart';
 
 class CalculationProvider extends ChangeNotifier {
   double buyingPrice = 0;
   double buyQuantity = 0;
+
+  bool get showCommissionBuy => hive.getBool("showCommissionBuy");
+  bool get showWaccBuy => hive.getBool("showWaccBuy");
+
+  bool get showCommissionSell => hive.getBool("showCommissionSell");
+  bool get showCapitalGainSell => hive.getBool("showCapitalGainSell");
+  bool get showNetProfitSell => hive.getBool("showProfitLossSell");
+
+  setShowCommissionBuy(bool value) async {
+    await hive.setBool("showCommissionBuy", value);
+    notifyListeners();
+  }
+
+  setShowCommissionSell(bool value) async {
+    await hive.setBool("showCommissionSell", value);
+    notifyListeners();
+  }
+
+  setShowCapitalGain(bool value) async {
+    await hive.setBool("showCapitalGainSell", value);
+    notifyListeners();
+  }
+
+  setShowProfitLoss(bool value) async {
+    await hive.setBool("showProfitLossSell", value);
+    notifyListeners();
+  }
+
+  setShowWacc(bool value) async {
+    await hive.setBool("showWaccBuy", value);
+    notifyListeners();
+  }
 
   double calculateWacc(double finalPrice, double quantity) {
     return finalPrice / quantity;
@@ -52,52 +87,34 @@ class CalculationProvider extends ChangeNotifier {
     return commission;
   }
 
-  String getCommissionMessage(double transactionAmount) {
+  String getCommissionMessage(double transactionAmount, BuildContext context) {
     if (transactionAmount <= 50000) {
       double percentageCommission = transactionAmount * 0.0036; // 0.36%
       if (percentageCommission > 10.0) {
-        return "You fall under the 0.36% slab as the amount is less than or equal to 50,000.";
+        return AppLocale.commissionSlabBelow50000.getString(context);
       } else {
-        return "You are charged Rs. 10 as commission because the calculated commission is less than Rs. 10.";
+        return AppLocale.commissionFlat10.getString(context);
       }
     } else if (transactionAmount <= 500000) {
       double commission = transactionAmount * 0.0033; // 0.33%
-      return "You fall under the 0.33% slab as the amount is between 50,001 and 500,000.";
+      return AppLocale.commissionSlab50000To500000.getString(context);
     } else if (transactionAmount <= 2000000) {
       double commission = transactionAmount * 0.0031; // 0.31%
-      return "You fall under the 0.31% slab as the amount is between 500,001 and 2,000,000.";
+      return AppLocale.commissionSlab500000To2000000.getString(context);
     } else if (transactionAmount <= 10000000) {
       double commission = transactionAmount * 0.0027; // 0.27%
-      return "You fall under the 0.27% slab as the amount is between 2,000,001 and 10,000,000.";
+      return AppLocale.commissionSlab2000000To10000000.getString(context);
     } else {
       double commission = transactionAmount * 0.0024; // 0.24%
-      return "You fall under the 0.24% slab as the amount is greater than 10,000,000.";
+      return AppLocale.commissionSlabAbove10000000.getString(context);
     }
   }
-
-  // double calculateReverseBuyPrice({
-  //   //reverse
-  //   required double totalCapital,
-  //   required int quantity,
-  //   required double commissionRate,
-  //   required double sebonFeeRate,
-  //   double dpCharges = 25.0,
-  // }) {
-  //   // Total fees percentage (Commission + SEBON fee)
-  //   double totalFeeRate = commissionRate + sebonFeeRate;
-
-  //   // Calculate buy price
-  //   double buyPrice =
-  //       totalCapital / (quantity * (1 + totalFeeRate) + (dpCharges / quantity));
-
-  //   return buyPrice;
-  // }
 
   BuyCalculation calculateReverseBuy({
     required BuyCalculation buyCalculation,
     required double totalAmount,
     double tolerance = 0.01, // Convergence tolerance
-    int maxIterations = 1000, // Max iterations to prevent infinite loops
+    int maxIterations = 100, // Max iterations to prevent infinite loops
   }) {
     // Step 1: Validate the state
     if (buyCalculation.isPriceLocked && buyCalculation.isQuantityLocked) {
@@ -128,6 +145,7 @@ class CalculationProvider extends ChangeNotifier {
       double variableCharges = calculateVariableCharges(transactionAmount);
 
       // Step 6: Adjust the unlocked value
+      //price locked means price is enetered and we find quantity
       if (buyCalculation.isPriceLocked) {
         // Price is locked; calculate quantity
         buyCalculation.quantity =
@@ -161,7 +179,6 @@ class CalculationProvider extends ChangeNotifier {
 
   SellCalculation calculateReverseForSell({
     required SellCalculation sellCalculation,
-    required bool isSellPriceLocked, // Determines which value is fixed
     double tolerance = 0.01, // Convergence tolerance
     int maxIterations = 100, // Maximum iterations
   }) {
@@ -188,7 +205,7 @@ class CalculationProvider extends ChangeNotifier {
       );
 
       // Step 2.4: Adjust the unlocked value
-      if (isSellPriceLocked) {
+      if (sellCalculation.isSellPriceLocked) {
         // Sell price is locked; calculate quantity
         sellCalculation.quantity =
             (sellCalculation.netReceivableAmount + gainTax + charges) /
@@ -201,7 +218,7 @@ class CalculationProvider extends ChangeNotifier {
       }
 
       // Step 2.5: Check for convergence
-      double currentValue = isSellPriceLocked
+      double currentValue = sellCalculation.isSellPriceLocked
           ? sellCalculation.quantity
           : sellCalculation.sellingPrice;
 

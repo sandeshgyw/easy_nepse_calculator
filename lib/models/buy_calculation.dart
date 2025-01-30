@@ -61,7 +61,11 @@ class SellCalculation extends Calculation {
   double netReceivableAmount;
   HoldinDays holdingDays;
 
+  bool isSellPriceLocked;
+
   double get sellTransactionAmount => quantity * sellingPrice;
+
+  bool get isQuantityLocked => !isSellPriceLocked;
 
   double get buyTransactionAmount => quantity * buyingPrice;
 
@@ -71,6 +75,7 @@ class SellCalculation extends Calculation {
     required this.buyingPrice,
     required this.sellingPrice,
     required this.netReceivableAmount,
+    required this.isSellPriceLocked,
     required this.holdingDays,
   });
 }

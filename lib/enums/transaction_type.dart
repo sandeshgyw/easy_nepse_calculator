@@ -13,6 +13,11 @@ enum HoldinDays {
   moreThanYear,
 }
 
+enum ReverseCalculationTypes {
+  priceCalculation,
+  quantityCalculation,
+}
+
 getTransactionType(String type) {
   switch (type) {
     case "buying":

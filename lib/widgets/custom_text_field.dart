@@ -124,7 +124,13 @@ class CustomTextField extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                   color: Colors.red,
                 ),
-                hintStyle: Theme.of(context).inputDecorationTheme.hintStyle,
+                hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontSize: 14, // Adjust based on your design
+                      color:
+                          Theme.of(context).hintColor, // Use theme's hint color
+                      overflow: TextOverflow
+                          .ellipsis, // Ensures the hint fits within the field
+                    ),
 
                 focusedBorder: disableFocus
                     ? const OutlineInputBorder(
@@ -135,12 +141,12 @@ class CustomTextField extends StatelessWidget {
                           color: Colors.grey,
                         ),
                       )
-                    : const OutlineInputBorder(
+                    : OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(5),
                         ),
                         borderSide: BorderSide(
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                 // border: InputBorder.none,
