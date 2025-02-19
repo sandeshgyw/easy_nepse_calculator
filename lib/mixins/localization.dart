@@ -138,6 +138,7 @@ mixin AppLocale {
   static const String enterSellPricePerShare = 'enterSellPricePerShare';
   static const String commissionSlabBelow50000 = 'commissionSlabBelow50000';
   static const String commissionFlat10 = 'commissionFlat10';
+
   static const String commissionSlab50000To500000 =
       'commissionSlab50000To500000';
   static const String commissionSlab500000To2000000 =
@@ -146,6 +147,33 @@ mixin AppLocale {
       'commissionSlab2000000To10000000';
   static const String commissionSlabAbove10000000 =
       'commissionSlabAbove10000000';
+
+  static const profitInformation = "profitInformation";
+  static const lossInformation = "lossInformation";
+
+  static const netReceivableAmount = "netReceivableAmount";
+  static const buyAmount = "buyAmount";
+  static const lossAmount = "lossAmount";
+  static const profitAmount = "profitAmount";
+
+  static const profitAmountMessage = "profitAmountMessage";
+  static const lossAmountMessage = "lossAmountMessage";
+
+  static const units = "units";
+
+  static const reverseBuyPriceMessage = "reverseBuyPriceMessage";
+  static const reverseBuyQuantityMessage = "reverseBuyQuantityMessage";
+
+  static const reverseSellPriceMessage = "reverseSellPriceMessage";
+  static const reverseSellQuantityMessage = "reverseSellQuantityMessage";
+
+  static const totalSharestoSell = "totalSharesToSell";
+  static const sellPriceForReverse = "sellPriceForReverse";
+
+  static const institutionalInvestorMessage = "institutionalInvestorMessage";
+  static const institutionalInvestorTitle = "institutionalInvestorTitle";
+  static const institutionalInvestorSubtitle = "institutionalInvestorSubtitle";
+  static const capitalGainTax10 = "capitalGainTax10";
 
   static const Map<String, dynamic> en = {
     title: 'Easy Nepse Calculator',
@@ -285,6 +313,30 @@ mixin AppLocale {
         "You fall under the 0.27% slab as the amount is between 2,000,001 and 10,000,000.",
     commissionSlabAbove10000000:
         "You fall under the 0.24% slab as the amount is greater than 10,000,000.",
+    profitInformation: "Profit Information",
+    lossInformation: "Loss Information",
+    profitAmountMessage: "You earned a profit of Rs. {}",
+    lossAmountMessage: "You beared a loss of Rs. {}",
+    netReceivableAmount: "Net Receivable Amount",
+    buyAmount: "Buy Amount",
+    lossAmount: "Loss Amount",
+    profitAmount: "Profit Amount",
+    units: "units",
+    reverseBuyPriceMessage:
+        "To buy {quantity} shares with your investment of Rs. {investment}, you need to buy at a price of Rs. {price} per share.",
+    reverseBuyQuantityMessage:
+        "You can buy {quantity} shares at Rs. {price} each with your investment of Rs. {investment}",
+    reverseSellPriceMessage:
+        "To sell {quantity} shares and receive Rs. {receivableAmount}, you need to set a sell price of Rs. {sellPrice} per share.",
+    reverseSellQuantityMessage:
+        "You need to sell {quantity} shares at Rs. {sellPrice} each to receive Rs. {receivableAmount} after fees and taxes.",
+    totalSharestoSell: "Enter the total number of shares you want to selll",
+    sellPriceForReverse: "Enter the price at which you want to sell each share",
+    institutionalInvestorMessage:
+        "You fall under the 10% capital gain tax slab as you are an institutional type investor.",
+    institutionalInvestorTitle: "Institutional Investor",
+    institutionalInvestorSubtitle: "Are you an institutional investor?",
+    capitalGainTax10: "10%",
   };
   static const Map<String, dynamic> ne = {
     title: 'सजिलो नेप्से क्याल्कुलेटर',
@@ -327,9 +379,9 @@ mixin AppLocale {
     reverseBuy: 'लगानी अनुसार खरिद',
     reverseSell: 'लक्ष्य अनुसार विक्रि',
     reverseBuyDescription:
-        'तपाईंले तोकिएको लगानी अनुसार कुन मूल्य वा परिमाण खरिद गर्न सक्नुहुन्छ?',
+        'तपाईंले तोकिएको लगानी अनुसार कुन मूल्यमा वा कति परिमाण खरिद गर्न सक्नुहुन्छ?',
     reverseSellDescription:
-        'तपाईंले तोकिएको लक्ष्य प्राप्त गर्न कुन मूल्य वा परिमाण विक्रि गर्न सक्नुहुन्छ?',
+        'तपाईंले तोकिएको लक्ष्य प्राप्त गर्न कुन मूल्यमा वा कति परिमाण विक्रि गर्न पर्नेछ?',
     totalPayableAmount: 'कुल तिर्नुपर्ने रकम',
     buyingPricePerShare: 'प्रति सेयर खरिद मूल्य',
     numberOfShares: 'सेयरको संख्या',
@@ -419,5 +471,31 @@ mixin AppLocale {
         "रकम २०,००,००१ देखि १,००,००,००० बीच भएकाले ०.२७% स्ल्याब।",
     commissionSlabAbove10000000:
         "रकम १०,००,००,००० भन्दा बढी भएकाले ०.२४% स्ल्याब।",
+    profitInformation: "नाफा सम्बन्धी जानकारी",
+    lossInformation: "घाटा सम्बन्धी जानकारी",
+    profitAmountMessage: "तपाईंले रु.{} नाफा कमाउनुभयो",
+    lossAmountMessage: "तपाईंले रु.{} घाटा बेहोर्नुभयो",
+    netReceivableAmount: "प्राप्त हुने कुल रकम",
+    buyAmount: "खरिद रकम",
+    lossAmount: "घाटा भएको रकम",
+    profitAmount: "नाफा भएको रकम",
+    units: "इकाई",
+    reverseBuyQuantityMessage:
+        "तपाईं आफ्नो रु. {investment} को लगानीमा प्रति सेयर रु. {price} मा {quantity} इकाई (सेयर) किन्न सक्नुहुन्छ।",
+    reverseBuyPriceMessage:
+        "{investment} लगानीमा {quantity} इकाई (सेयर) किन्न, प्रति सेयर रु. {price} मा खरिद गर्न आवश्यक छ।",
+    reverseSellPriceMessage:
+        "{quantity} इकाई (सेयर) बेचेर रु. {receivableAmount} प्राप्त गर्न, तपाईंले प्रति सेयर रु. {sellPrice} को विक्रि मूल्य सेट गर्नुपर्छ।",
+    reverseSellQuantityMessage:
+        "शुल्क र करहरू कटौती पछि रु. {receivableAmount} प्राप्त गर्न, तपाईंले प्रति सेयर रु. {sellPrice} मा {quantity} इकाई (सेयर) बेच्न आवश्यक छ।",
+    totalSharestoSell:
+        "तपाईंले बेच्न चाहनु भएको कुल सेयर संख्या प्रविष्ट गर्नुहोस्।",
+    sellPriceForReverse:
+        "तपाईंले प्रत्येक सेयर कति मूल्यमा बेच्न चाहनुभएको छ प्रविष्ट गर्नुहोस्।",
+    institutionalInvestorMessage:
+        "तपाईं संस्थागत लगानीकर्ता भएकाले तपाईं १०% पूँजीगत लाभ कर स्ल्याब अन्तर्गत पर्नुहुन्छ।",
+    institutionalInvestorTitle: "संस्थागत लगानीकर्ता",
+    institutionalInvestorSubtitle: "के तपाईं संस्थागत लगानीकर्ता हुनुहुन्छ?",
+    capitalGainTax10: "१०%",
   };
 }
