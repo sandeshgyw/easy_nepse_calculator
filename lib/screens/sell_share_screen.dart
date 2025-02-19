@@ -8,7 +8,6 @@ import 'package:easy_nepse_calculator/widgets/custom_chip.dart';
 import 'package:easy_nepse_calculator/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
 class SellShareScreen extends StatefulWidget {
@@ -24,6 +23,8 @@ class _SellShareScreenState extends State<SellShareScreen> {
   bool get showCommission => hive.getBool("showCommissionSell");
   bool get showCapitalGain => hive.getBool("showCapitalGainSell");
   bool get showNetProfit => hive.getBool("showProfitLossSell");
+
+  InvestorType investorType = InvestorType.individual;
 
   final SellCalculation _sellCalculation = SellCalculation(
     quantity: 0,
@@ -57,7 +58,7 @@ class _SellShareScreenState extends State<SellShareScreen> {
             sellPrice: _sellCalculation.sellingPrice,
             buyPrice: _sellCalculation.buyingPrice,
             quantity: _sellCalculation.quantity,
-            isInstitutional: false,
+            isInstitutional: investorType == InvestorType.institution,
             holdingDays: _sellCalculation.holdingDays,
           )
           .toStringAsFixed(2);
@@ -72,7 +73,7 @@ class _SellShareScreenState extends State<SellShareScreen> {
           sellPrice: _sellCalculation.sellingPrice,
           buyPrice: _sellCalculation.buyingPrice,
           quantity: _sellCalculation.quantity,
-          isInstitutional: false,
+          isInstitutional: investorType == InvestorType.institution,
           holdingDays: _sellCalculation.holdingDays,
         )
         .toStringAsFixed(2);
@@ -99,10 +100,10 @@ class _SellShareScreenState extends State<SellShareScreen> {
                     icon: const Icon(
                       Icons.close,
                     )),
-                const ListTile(
+                ListTile(
                   dense: true,
                   title: Text(
-                    'Capital Gain Info',
+                    AppLocale.capitalGainInfo.getString(context),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -111,8 +112,8 @@ class _SellShareScreenState extends State<SellShareScreen> {
                 ),
                 ListTile(
                   dense: true,
-                  title: const Text(
-                    'Capital Gain ',
+                  title: Text(
+                    AppLocale.capitalGain.getString(context),
                   ),
                   trailing: Text(
                     AppLocale.currencySymbol.getString(context) +
@@ -121,18 +122,24 @@ class _SellShareScreenState extends State<SellShareScreen> {
                               buyPrice: _sellCalculation.buyingPrice,
                               quantity: _sellCalculation.quantity,
                               // transactionAmount: _sellCalculation.sellTransactionAmount,
-                              isInstitutional: false,
+                              isInstitutional:
+                                  investorType == InvestorType.institution,
                               holdingDays: _sellCalculation.holdingDays,
                             ).toStringAsFixed(2)}",
                   ),
                 ),
                 ListTile(
                   dense: true,
-                  title: const Text('Gain Tax %'),
+                  title: Text(
+                    AppLocale.gainTaxPercentage.getString(context),
+                  ),
                   trailing: Text(
-                    _sellCalculation.holdingDays == HoldinDays.lessThanYear
-                        ? AppLocale.sevenPointFivePercent.getString(context)
-                        : AppLocale.fivePercent.getString(context),
+                    investorType == InvestorType.institution
+                        ? AppLocale.capitalGainTax10.getString(context)
+                        : _sellCalculation.holdingDays ==
+                                HoldinDays.lessThanYear
+                            ? AppLocale.sevenPointFivePercent.getString(context)
+                            : AppLocale.fivePercent.getString(context),
                   ),
                 ),
                 const Divider(
@@ -142,21 +149,27 @@ class _SellShareScreenState extends State<SellShareScreen> {
                 ),
                 ListTile(
                   dense: true,
-                  title: const Text('Capital Gain Tax'),
+                  title: Text(
+                    AppLocale.capitalGainTax.getString(context),
+                  ),
                   trailing: Text(AppLocale.currencySymbol.getString(context) +
                       "${calculationProvider.calculateCapitalGainTax(
                             sellPrice: _sellCalculation.sellingPrice,
                             buyPrice: _sellCalculation.buyingPrice,
                             quantity: _sellCalculation.quantity,
                             // transactionAmount: _sellCalculation.sellTransactionAmount,
-                            isInstitutional: false,
+                            isInstitutional:
+                                investorType == InvestorType.institution,
                             holdingDays: _sellCalculation.holdingDays,
                           ).toStringAsFixed(2)}"),
                 ),
                 Text(
-                  _sellCalculation.holdingDays == HoldinDays.lessThanYear
-                      ? AppLocale.capitalGainSlab7_5.getString(context)
-                      : AppLocale.capitalGainSlab5.getString(context),
+                  investorType == InvestorType.institution
+                      ? AppLocale.institutionalInvestorMessage
+                          .getString(context)
+                      : _sellCalculation.holdingDays == HoldinDays.lessThanYear
+                          ? AppLocale.capitalGainSlab7_5.getString(context)
+                          : AppLocale.capitalGainSlab5.getString(context),
                   style: const TextStyle(fontSize: 11),
                 ),
               ],
@@ -187,7 +200,9 @@ class _SellShareScreenState extends State<SellShareScreen> {
                 ListTile(
                   dense: true,
                   title: Text(
-                    isProfit ? "Profit Information" : "Loss Information",
+                    isProfit
+                        ? AppLocale.profitInformation.getString(context)
+                        : AppLocale.lossInformation.getString(context),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -196,7 +211,7 @@ class _SellShareScreenState extends State<SellShareScreen> {
                 ),
                 ListTile(
                   dense: true,
-                  title: Text('Net Receivable Amount'),
+                  title: Text(AppLocale.netReceivableAmount.getString(context)),
                   trailing: Text(
                     AppLocale.currencySymbol.getString(context) +
                         calculationProvider
@@ -204,7 +219,8 @@ class _SellShareScreenState extends State<SellShareScreen> {
                               sellPrice: _sellCalculation.sellingPrice,
                               buyPrice: _sellCalculation.buyingPrice,
                               quantity: _sellCalculation.quantity,
-                              isInstitutional: false,
+                              isInstitutional:
+                                  investorType == InvestorType.institution,
                               holdingDays: _sellCalculation.holdingDays,
                             )
                             .toStringAsFixed(
@@ -215,7 +231,7 @@ class _SellShareScreenState extends State<SellShareScreen> {
                 ListTile(
                   dense: true,
                   title: Text(
-                    'Buy Amount',
+                    AppLocale.buyAmount.getString(context),
                   ),
                   trailing: Text(
                     AppLocale.currencySymbol.getString(context) +
@@ -229,7 +245,11 @@ class _SellShareScreenState extends State<SellShareScreen> {
                 ),
                 ListTile(
                   dense: true,
-                  title: Text(isProfit ? "Profit Amount" : "Loss Amount"),
+                  title: Text(
+                    isProfit
+                        ? AppLocale.profitAmount.getString(context)
+                        : AppLocale.lossAmount.getString(context),
+                  ),
                   trailing: Text(AppLocale.currencySymbol.getString(context) +
                       "${amount.abs().toStringAsFixed(2)}"),
                 ),
@@ -237,8 +257,15 @@ class _SellShareScreenState extends State<SellShareScreen> {
                   visualDensity: VisualDensity(vertical: -4),
                   subtitle: Text(
                     isProfit
-                        ? "You earned a profit of Rs. ${amount.toStringAsFixed(2)}"
-                        : "You beared a loss of Rs. ${amount.abs().toStringAsFixed(2)}",
+                        ? AppLocale.profitAmountMessage
+                            .getString(context)
+                            .replaceAll("{}", amount.toStringAsFixed(2))
+                        : AppLocale.lossAmountMessage
+                            .getString(context)
+                            .replaceAll(
+                              "{}",
+                              amount.abs().toStringAsFixed(2),
+                            ),
                     style: const TextStyle(fontSize: 11),
                   ),
                 ),
@@ -427,80 +454,134 @@ class _SellShareScreenState extends State<SellShareScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      ListTile(
-                        minLeadingWidth: 0,
+                      CheckboxListTile(
                         contentPadding: EdgeInsets.zero,
-                        title: Text(
-                          AppLocale.holdingDays.getString(context),
-                        ),
-                        subtitle: Text(
-                          AppLocale.holdingDaysQuestion.getString(context),
-                          style: TextStyle(
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ToggleButtons(
-                            borderRadius:
-                                BorderRadius.circular(8), // Rounded corners
-                            borderWidth: 2, // Slightly thicker border
-                            borderColor: Theme.of(context)
-                                .dividerColor, // Border for unselected buttons
-                            selectedBorderColor: Theme.of(context)
-                                .colorScheme
-                                .primary, // Highlight for selected
-                            fillColor: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withOpacity(0.1), // Background for selected
-                            selectedColor: Theme.of(context)
-                                .colorScheme
-                                .primary, // Text color for selected
+                        title: Text(AppLocale.institutionalInvestorTitle
+                            .getString(context)),
+                        subtitle: Text(AppLocale.institutionalInvestorSubtitle
+                            .getString(context)),
+                        value: investorType == InvestorType.institution,
+                        onChanged: (bool? isInstitutional) {
+                          setState(() {
+                            investorType = isInstitutional!
+                                ? InvestorType.institution
+                                : InvestorType.individual;
+                          });
+                          invokeCalculation();
+                        },
 
-                            color: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.color
-                                ?.withOpacity(0.7),
-
-                            isSelected: [
-                              _sellCalculation.holdingDays ==
-                                  HoldinDays.lessThanYear,
-                              _sellCalculation.holdingDays ==
-                                  HoldinDays.moreThanYear,
-                            ],
-                            onPressed: (index) {
-                              if (index == 0) {
-                                _sellCalculation.holdingDays =
-                                    HoldinDays.lessThanYear;
-                              } else {
-                                _sellCalculation.holdingDays =
-                                    HoldinDays.moreThanYear;
-                              }
-                              invokeCalculation();
-                            },
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                                child: Text(
-                                  AppLocale.underOneYear.getString(context),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                                child: Text(
-                                  AppLocale.overOneYear.getString(context),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                        // activeColor: Theme.of(context)
+                        //     .colorScheme
+                        //     .primary, // Highlight color when ON
+                        // secondary:
+                        //     Icon(Icons.business), // Optional icon for better UI
                       ),
                       const SizedBox(
                         height: 10,
+                      ),
+                      AnimatedSwitcher(
+                        duration: Duration(milliseconds: 500),
+                        child: investorType == InvestorType.institution
+                            ? null
+                            : AnimatedSize(
+                                duration: Duration(milliseconds: 500),
+                                child: AnimatedOpacity(
+                                  duration: Duration(milliseconds: 500),
+                                  opacity:
+                                      investorType != InvestorType.institution
+                                          ? 1.0
+                                          : 0.0,
+                                  child: Column(
+                                    children: [
+                                      ListTile(
+                                        minLeadingWidth: 0,
+                                        contentPadding: EdgeInsets.zero,
+                                        title: Text(
+                                          AppLocale.holdingDays
+                                              .getString(context),
+                                        ),
+                                        subtitle: Text(
+                                          AppLocale.holdingDaysQuestion
+                                              .getString(context),
+                                          style: TextStyle(
+                                            fontStyle: FontStyle.italic,
+                                          ),
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          ToggleButtons(
+                                            borderRadius: BorderRadius.circular(
+                                                8), // Rounded corners
+                                            borderWidth:
+                                                2, // Slightly thicker border
+                                            borderColor: Theme.of(context)
+                                                .dividerColor, // Border for unselected buttons
+                                            selectedBorderColor: Theme.of(
+                                                    context)
+                                                .colorScheme
+                                                .primary, // Highlight for selected
+                                            fillColor: Theme.of(context)
+                                                .colorScheme
+                                                .primary
+                                                .withOpacity(
+                                                    0.1), // Background for selected
+                                            selectedColor: Theme.of(context)
+                                                .colorScheme
+                                                .primary, // Text color for selected
+
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.color
+                                                ?.withOpacity(0.7),
+
+                                            isSelected: [
+                                              _sellCalculation.holdingDays ==
+                                                  HoldinDays.lessThanYear,
+                                              _sellCalculation.holdingDays ==
+                                                  HoldinDays.moreThanYear,
+                                            ],
+                                            onPressed: (index) {
+                                              if (index == 0) {
+                                                _sellCalculation.holdingDays =
+                                                    HoldinDays.lessThanYear;
+                                              } else {
+                                                _sellCalculation.holdingDays =
+                                                    HoldinDays.moreThanYear;
+                                              }
+                                              invokeCalculation();
+                                            },
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 16.0),
+                                                child: Text(
+                                                  AppLocale.underOneYear
+                                                      .getString(context),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 16.0),
+                                                child: Text(
+                                                  AppLocale.overOneYear
+                                                      .getString(context),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                       ),
                       Theme(
                         data: Theme.of(context).copyWith(
@@ -552,7 +633,7 @@ class _SellShareScreenState extends State<SellShareScreen> {
                               contentPadding: EdgeInsets.zero,
                               title: Text(
                                 AppLocale.capitalGainTax.getString(context) +
-                                    "${_sellCalculation.holdingDays == HoldinDays.lessThanYear ? " ( ${AppLocale.sevenPointFivePercent.getString(context)} ) " : "( ${AppLocale.fivePercent.getString(context)} )"}",
+                                    " ${investorType == InvestorType.institution ? "( ${AppLocale.capitalGainTax10.getString(context)} )" : _sellCalculation.holdingDays == HoldinDays.lessThanYear ? " ( ${AppLocale.sevenPointFivePercent.getString(context)} ) " : "( ${AppLocale.fivePercent.getString(context)} )"}",
                               ),
                               trailing: CustomChip(
                                   labelText: calculationProvider
@@ -561,7 +642,8 @@ class _SellShareScreenState extends State<SellShareScreen> {
                                             _sellCalculation.sellingPrice,
                                         buyPrice: _sellCalculation.buyingPrice,
                                         quantity: _sellCalculation.quantity,
-                                        isInstitutional: false,
+                                        isInstitutional: investorType ==
+                                            InvestorType.institution,
                                         holdingDays:
                                             _sellCalculation.holdingDays,
                                       )
@@ -579,7 +661,8 @@ class _SellShareScreenState extends State<SellShareScreen> {
                                             _sellCalculation.sellingPrice,
                                         buyPrice: _sellCalculation.buyingPrice,
                                         quantity: _sellCalculation.quantity,
-                                        isInstitutional: false,
+                                        isInstitutional: investorType ==
+                                            InvestorType.institution,
                                         holdingDays:
                                             _sellCalculation.holdingDays,
                                       ) >
@@ -597,7 +680,8 @@ class _SellShareScreenState extends State<SellShareScreen> {
                                           buyPrice:
                                               _sellCalculation.buyingPrice,
                                           quantity: _sellCalculation.quantity,
-                                          isInstitutional: false,
+                                          isInstitutional: investorType ==
+                                              InvestorType.institution,
                                           holdingDays:
                                               _sellCalculation.holdingDays,
                                         ) >
@@ -609,7 +693,8 @@ class _SellShareScreenState extends State<SellShareScreen> {
                                           buyPrice:
                                               _sellCalculation.buyingPrice,
                                           quantity: _sellCalculation.quantity,
-                                          isInstitutional: false,
+                                          isInstitutional: investorType ==
+                                              InvestorType.institution,
                                           holdingDays:
                                               _sellCalculation.holdingDays,
                                         ) -
@@ -622,7 +707,8 @@ class _SellShareScreenState extends State<SellShareScreen> {
                                       sellPrice: _sellCalculation.sellingPrice,
                                       buyPrice: _sellCalculation.buyingPrice,
                                       quantity: _sellCalculation.quantity,
-                                      isInstitutional: false,
+                                      isInstitutional: investorType ==
+                                          InvestorType.institution,
                                       holdingDays: _sellCalculation.holdingDays,
                                     ) > _sellCalculation.buyTransactionAmount ? AppLocale.netProfit.getString(context) : AppLocale.netLoss.getString(context)}",
                               ),
@@ -634,7 +720,8 @@ class _SellShareScreenState extends State<SellShareScreen> {
                                             buyPrice:
                                                 _sellCalculation.buyingPrice,
                                             quantity: _sellCalculation.quantity,
-                                            isInstitutional: false,
+                                            isInstitutional: investorType ==
+                                                InvestorType.institution,
                                             holdingDays:
                                                 _sellCalculation.holdingDays,
                                           ) -
@@ -651,7 +738,8 @@ class _SellShareScreenState extends State<SellShareScreen> {
                                                   _sellCalculation.buyingPrice,
                                               quantity:
                                                   _sellCalculation.quantity,
-                                              isInstitutional: false,
+                                              isInstitutional: investorType ==
+                                                  InvestorType.institution,
                                               holdingDays:
                                                   _sellCalculation.holdingDays,
                                             ) >
@@ -665,7 +753,8 @@ class _SellShareScreenState extends State<SellShareScreen> {
                                                   _sellCalculation.buyingPrice,
                                               quantity:
                                                   _sellCalculation.quantity,
-                                              isInstitutional: false,
+                                              isInstitutional: investorType ==
+                                                  InvestorType.institution,
                                               holdingDays:
                                                   _sellCalculation.holdingDays,
                                             ) -
@@ -726,7 +815,7 @@ class _SellShareScreenState extends State<SellShareScreen> {
                         ),
                         child: ListTile(
                           title: Text(
-                            "Net Receivable Amount",
+                            AppLocale.netReceivableAmount.getString(context),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,

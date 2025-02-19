@@ -18,6 +18,11 @@ enum ReverseCalculationTypes {
   quantityCalculation,
 }
 
+enum InvestorType {
+  individual,
+  institution,
+}
+
 getTransactionType(String type) {
   switch (type) {
     case "buying":
