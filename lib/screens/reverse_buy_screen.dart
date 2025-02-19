@@ -302,7 +302,7 @@ class _ReverseBuyScreenState extends State<ReverseBuyScreen> {
                                 SizedBox(
                                   height: 20,
                                 ),
-                                buyPriceField(false),
+                                buyPriceField(),
                               ] else ...[
                                 Text(
                                   AppLocale.howManySharesToBuy
@@ -314,7 +314,7 @@ class _ReverseBuyScreenState extends State<ReverseBuyScreen> {
                                 SizedBox(
                                   height: 20,
                                 ),
-                                buyQuantityField(true),
+                                buyQuantityField(),
                               ],
                               SizedBox(
                                 height: 20,
@@ -416,7 +416,8 @@ class _ReverseBuyScreenState extends State<ReverseBuyScreen> {
                     // Dynamic Value
                     Text(
                       isFindQuantity
-                          ? "${quantity.toStringAsFixed(2)} units"
+                          ? "${quantity.toStringAsFixed(2)} " +
+                              AppLocale.units.getString(context)
                           : AppLocale.currencySymbol.getString(context) +
                               "${buyPrice.toStringAsFixed(2)}",
                       style: TextStyle(
@@ -432,8 +433,18 @@ class _ReverseBuyScreenState extends State<ReverseBuyScreen> {
               ),
               Text(
                 isFindQuantity
-                    ? "You can buy ${quantity.toStringAsFixed(2)} shares at Rs. ${buyPrice.toStringAsFixed(2)} each with your investment of Rs. ${investmentAmount.toStringAsFixed(2)}"
-                    : "To buy ${quantity.toStringAsFixed(2)} shares with your investment of Rs. ${investmentAmount.toStringAsFixed(2)}, you need to buy at a price of Rs. ${buyPrice.toStringAsFixed(2)} per share.",
+                    ? AppLocale.reverseBuyQuantityMessage
+                        .getString(context)
+                        .replaceAll("{quantity}", quantity.toStringAsFixed(2))
+                        .replaceAll(
+                            "{investment}", investmentAmount.toStringAsFixed(2))
+                        .replaceAll("{price}", buyPrice.toStringAsFixed(2))
+                    : AppLocale.reverseBuyPriceMessage
+                        .getString(context)
+                        .replaceAll("{quantity}", quantity.toStringAsFixed(2))
+                        .replaceAll(
+                            "{investment}", investmentAmount.toStringAsFixed(2))
+                        .replaceAll("{price}", buyPrice.toStringAsFixed(2)),
                 style: TextStyle(
                   fontSize: 14, fontStyle: FontStyle.italic,
                   // fontWeight: FontWeight.bold,
@@ -478,7 +489,7 @@ class _ReverseBuyScreenState extends State<ReverseBuyScreen> {
     );
   }
 
-  CustomTextField buyQuantityField(bool isResult) {
+  CustomTextField buyQuantityField() {
     return CustomTextField(
       validator: (value) {
         if (_reverseBuyCalculation.isQuantityLocked &&
@@ -488,16 +499,14 @@ class _ReverseBuyScreenState extends State<ReverseBuyScreen> {
         return null;
       },
       textController: reverseBuyingControllers["quantity"],
-      hintText: isResult
-          ? AppLocale.resultAfterCalculation.getString(context)
-          : AppLocale.enterQuantity.getString(context),
+      hintText: AppLocale.enterQuantity.getString(context),
       labelText: AppLocale.numberOfShares.getString(context),
       keyboardType: TextInputType.phone,
       readOnly: !_reverseBuyCalculation.isQuantityLocked,
     );
   }
 
-  CustomTextField buyPriceField(bool isResult) {
+  CustomTextField buyPriceField() {
     return CustomTextField(
       validator: (value) {
         if (_reverseBuyCalculation.isPriceLocked &&
@@ -506,9 +515,7 @@ class _ReverseBuyScreenState extends State<ReverseBuyScreen> {
         }
         return null;
       },
-      hintText: isResult
-          ? AppLocale.resultAfterCalculation.getString(context)
-          : AppLocale.enterBuyingPrice.getString(context),
+      hintText: AppLocale.enterBuyingPrice.getString(context),
       labelText: AppLocale.buyingPricePerShare.getString(context),
       keyboardType: TextInputType.phone,
       prefixText: AppLocale.currencySymbol.getString(context),
@@ -766,7 +773,8 @@ class _ReverseBuyScreenState extends State<ReverseBuyScreen> {
                   visualDensity: VisualDensity(vertical: -4),
                   subtitle: Text(
                     AppLocale.costPricePerShare.getString(context) +
-                        " Rs. ${(totalAmount / quantity).toStringAsFixed(2)}",
+                        AppLocale.currencySymbol.getString(context) +
+                        "${(totalAmount / quantity).toStringAsFixed(2)}",
                     style: const TextStyle(
                       fontSize: 11,
                     ),

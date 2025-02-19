@@ -636,10 +636,10 @@ class _ReverseSellScreenState extends State<ReverseSellScreen> {
                     icon: const Icon(
                       Icons.close,
                     )),
-                const ListTile(
+                ListTile(
                   dense: true,
                   title: Text(
-                    'Total Fees',
+                    AppLocale.totalFees.getString(context),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -648,7 +648,7 @@ class _ReverseSellScreenState extends State<ReverseSellScreen> {
                 ),
                 ListTile(
                   dense: true,
-                  title: const Text('DP Fee'),
+                  title: Text(AppLocale.dpFee.getString(context)),
                   trailing: Text(
                     AppLocale.currencySymbol.getString(context) +
                         calculationProvider
@@ -658,7 +658,7 @@ class _ReverseSellScreenState extends State<ReverseSellScreen> {
                 ),
                 ListTile(
                   dense: true,
-                  title: const Text('SEBON Commission'),
+                  title: Text(AppLocale.sebonCommission.getString(context)),
                   trailing: Text(
                     AppLocale.currencySymbol.getString(context) +
                         calculationProvider
@@ -668,7 +668,7 @@ class _ReverseSellScreenState extends State<ReverseSellScreen> {
                 ),
                 ListTile(
                   dense: true,
-                  title: const Text('Broker Commission'),
+                  title: Text(AppLocale.brokerCommission.getString(context)),
                   trailing: Text(
                     AppLocale.currencySymbol.getString(context) +
                         calculationProvider
@@ -685,8 +685,8 @@ class _ReverseSellScreenState extends State<ReverseSellScreen> {
                   dense: true,
 
                   // leading: new Icon(Icons.share),
-                  title: const Text(
-                    'Total',
+                  title: Text(
+                    AppLocale.total.getString(context),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -742,7 +742,7 @@ class _ReverseSellScreenState extends State<ReverseSellScreen> {
 
   CustomTextField quantityFieldReverseSell() {
     return CustomTextField(
-      hintText: "Enter the total number of shares you want to sell",
+      hintText: AppLocale.totalSharestoSell.getString(context),
       labelText: AppLocale.numberOfShares.getString(context),
       keyboardType: TextInputType.number,
       textController: reverseSellingControllers["quantity"],
@@ -759,7 +759,7 @@ class _ReverseSellScreenState extends State<ReverseSellScreen> {
 
   CustomTextField sellPriceReverseSellField() {
     return CustomTextField(
-      hintText: "Enter the price at which you want to sell each share",
+      hintText: AppLocale.sellPriceForReverse.getString(context),
       labelText: AppLocale.sellPriceLabel.getString(context),
       keyboardType: TextInputType.number,
       prefixText: AppLocale.currencySymbol.getString(context),
@@ -885,7 +885,8 @@ class _ReverseSellScreenState extends State<ReverseSellScreen> {
                     // Dynamic Value
                     Text(
                       isFindQuantity
-                          ? "${quantity.toStringAsFixed(2)} units"
+                          ? "${quantity.toStringAsFixed(2)} " +
+                              AppLocale.units.getString(context)
                           : AppLocale.currencySymbol.getString(context) +
                               "${sellPrice.toStringAsFixed(2)}",
                       style: TextStyle(
@@ -901,8 +902,22 @@ class _ReverseSellScreenState extends State<ReverseSellScreen> {
               // Result Description
               Text(
                 isFindQuantity
-                    ? "You need to sell ${quantity.toStringAsFixed(2)} shares at Rs. ${sellPrice.toStringAsFixed(2)} each to receive Rs. ${receivableAmount.toStringAsFixed(2)} after fees and taxes."
-                    : "To sell ${quantity.toStringAsFixed(2)} shares and receive Rs. ${receivableAmount.toStringAsFixed(2)}, you need to set a sell price of Rs. ${sellPrice.toStringAsFixed(2)} per share.",
+                    ? AppLocale.reverseSellQuantityMessage
+                        .getString(context)
+                        .replaceAll("{quantity}", quantity.toStringAsFixed(2))
+                        .replaceAll("{sellPrice}", sellPrice.toStringAsFixed(2))
+                        .replaceAll(
+                          "{receivableAmount}",
+                          receivableAmount.toStringAsFixed(2),
+                        )
+                    : AppLocale.reverseSellPriceMessage
+                        .getString(context)
+                        .replaceAll("{quantity}", quantity.toStringAsFixed(2))
+                        .replaceAll("{sellPrice}", sellPrice.toStringAsFixed(2))
+                        .replaceAll(
+                          "{receivableAmount}",
+                          receivableAmount.toStringAsFixed(2),
+                        ),
                 style: TextStyle(
                   fontSize: 14,
                   fontStyle: FontStyle.italic,
