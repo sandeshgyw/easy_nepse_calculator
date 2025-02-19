@@ -170,7 +170,8 @@ class _BonusShareScreenState extends State<BonusShareScreen> {
                             ),
                           ),
                           subtitle: Text(
-                            "Rs.${calculationProvider.calculateBonusAdjustedPrice(_bonusAdjustmentCalculation.marketPrice, _bonusAdjustmentCalculation.bonusPercent).toStringAsFixed(2)}",
+                            AppLocale.currencySymbol.getString(context) +
+                                "${calculationProvider.calculateBonusAdjustedPrice(_bonusAdjustmentCalculation.marketPrice, _bonusAdjustmentCalculation.bonusPercent).toStringAsFixed(2)}",
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,

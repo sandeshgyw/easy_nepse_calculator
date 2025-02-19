@@ -1,4 +1,6 @@
+import 'package:easy_nepse_calculator/mixins/localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localization/flutter_localization.dart';
 
 class CustomChip extends StatelessWidget {
   final String labelText;
@@ -26,7 +28,7 @@ class CustomChip extends StatelessWidget {
         ),
       ),
       label: Text(
-        labelText,
+        AppLocale.currencySymbol.getString(context) + labelText,
       ),
       deleteIcon: Icon(
         Icons.arrow_forward_ios,

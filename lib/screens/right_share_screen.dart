@@ -229,7 +229,8 @@ class _RightShareScreenState extends State<RightShareScreen> {
                             ),
                           ),
                           subtitle: Text(
-                            "Rs.${calculationProvider.calculateRightAdjustedPrice(_rightShareAdjustmentCalculation.marketPrice, _rightShareAdjustmentCalculation.rightSharePercent, _rightShareAdjustmentCalculation.paidUpValue).toStringAsFixed(2)}",
+                            AppLocale.currencySymbol.getString(context) +
+                                "${calculationProvider.calculateRightAdjustedPrice(_rightShareAdjustmentCalculation.marketPrice, _rightShareAdjustmentCalculation.rightSharePercent, _rightShareAdjustmentCalculation.paidUpValue).toStringAsFixed(2)}",
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
