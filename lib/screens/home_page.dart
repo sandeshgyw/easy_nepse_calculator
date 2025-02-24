@@ -82,10 +82,43 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: AppLocale.title.getString(context),
-      ),
-      drawer: CustomDrawer(packageInfo: packageInfo),
+      appBar: MediaQuery.of(context).size.width < 800
+          ? CustomAppBar(
+              title: AppLocale.title.getString(context),
+            )
+          : AppBar(
+              automaticallyImplyLeading: false,
+              forceMaterialTransparency: true,
+              title: Text("Easy Nepse Calculator"),
+              centerTitle: true,
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        "Settings",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      Text(
+                        "Privacy Policy",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+      drawer: MediaQuery.of(context).size.width < 800
+          ? CustomDrawer(packageInfo: packageInfo)
+          : null,
       body: ListView(
         children: [
           ListTile(
@@ -98,11 +131,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           GridView.count(
-            crossAxisCount: 2, // 2 items per row
+            crossAxisCount: MediaQuery.of(context).size.width < 800 ? 2 : 4,
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             padding: const EdgeInsets.all(8.0),
-
             children: [
               buildGridItem(
                 AppLocale.buy.getString(context),
@@ -161,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           GridView.count(
-            crossAxisCount: 2, // 2 items per row
+            crossAxisCount: MediaQuery.of(context).size.width < 800 ? 2 : 4,
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             padding: const EdgeInsets.all(8.0),
