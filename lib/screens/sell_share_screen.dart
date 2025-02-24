@@ -423,9 +423,10 @@ class _SellShareScreenState extends State<SellShareScreen> {
                         height: 10,
                       ),
                       CustomTextField(
-                        hintText: AppLocale.enterBuyingPrice.getString(context),
                         labelText:
-                            AppLocale.buyingPricePerShare.getString(context),
+                            AppLocale.buyingPricePerShare.getString(context) +
+                                " ( ${AppLocale.wacc.getString(context)} )",
+                        hintText: AppLocale.enterWacc.getString(context),
                         keyboardType: TextInputType.number,
                         prefixText: AppLocale.currencySymbol.getString(context),
                         textController: sellingControllers["buyPrice"],

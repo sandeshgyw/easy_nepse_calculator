@@ -5,6 +5,7 @@ import 'package:easy_nepse_calculator/services/hive.dart';
 import 'package:easy_nepse_calculator/services/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
+import 'package:lottie/lottie.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -42,11 +43,10 @@ class _SplashScreenState extends State<SplashScreen> {
             // App Logo with Rounded Borders
             ClipRRect(
               borderRadius: BorderRadius.circular(20), // Rounded corners
-              child: Image.asset(
-                "assets/icon/logo.png",
-                height: 120,
-                width: 120,
-                fit: BoxFit.cover,
+              child: Lottie.asset(
+                'assets/icon/logo_lottie.json',
+                width: 100,
+                height: 100,
               ),
             ),
             const SizedBox(height: 20),

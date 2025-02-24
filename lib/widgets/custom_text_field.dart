@@ -28,6 +28,7 @@ class CustomTextField extends StatelessWidget {
       this.onFieldSubmitted,
       this.inputFormatters,
       this.labelText,
+      this.helperText,
       this.prefixTextOutsideBox,
       this.scrollPadding = const EdgeInsets.all(8),
       this.prefixIcon,
@@ -57,6 +58,7 @@ class CustomTextField extends StatelessWidget {
       prefixTextOutsideBox,
       initialValue,
       suffixText,
+      helperText,
       labelText;
   final Widget? suffixWidget, prefixIcon;
   final VoidCallback? onPrefixOutsideBoxPressed;
@@ -86,6 +88,9 @@ class CustomTextField extends StatelessWidget {
             ),
           Expanded(
             child: TextFormField(
+              onTapOutside: (event) {
+                FocusManager.instance.primaryFocus?.unfocus();
+              },
               key: Key(hintText!),
               readOnly: readOnly,
               scrollPadding: scrollPadding,
@@ -112,6 +117,7 @@ class CustomTextField extends StatelessWidget {
                 prefixText: prefixText,
                 fillColor: Theme.of(context).focusColor,
                 filled: greyBackGround,
+                helperText: helperText,
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(5),

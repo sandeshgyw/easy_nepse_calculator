@@ -175,6 +175,8 @@ mixin AppLocale {
   static const institutionalInvestorSubtitle = "institutionalInvestorSubtitle";
   static const capitalGainTax10 = "capitalGainTax10";
 
+  static const enterWacc = "enterWacc";
+
   static const Map<String, dynamic> en = {
     title: 'Easy Nepse Calculator',
     changeLanguage: "Change Language",
@@ -337,6 +339,7 @@ mixin AppLocale {
     institutionalInvestorTitle: "Institutional Investor",
     institutionalInvestorSubtitle: "Are you an institutional investor?",
     capitalGainTax10: "10%",
+    enterWacc: "Enter your WACC value",
   };
   static const Map<String, dynamic> ne = {
     title: 'सजिलो नेप्से क्याल्कुलेटर',
@@ -497,5 +500,6 @@ mixin AppLocale {
     institutionalInvestorTitle: "संस्थागत लगानीकर्ता",
     institutionalInvestorSubtitle: "के तपाईं संस्थागत लगानीकर्ता हुनुहुन्छ?",
     capitalGainTax10: "१०%",
+    enterWacc: "डब्लु.ए.सी.सी मूल्य प्रविष्ट गर्नुहोस्"
   };
 }

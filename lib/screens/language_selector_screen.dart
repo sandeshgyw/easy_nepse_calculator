@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+import 'dart:ui';
+
 import 'package:easy_nepse_calculator/mixins/localization.dart';
 import 'package:easy_nepse_calculator/providers/theme_provider.dart';
 import 'package:easy_nepse_calculator/screens/home_page.dart';
@@ -5,6 +8,8 @@ import 'package:easy_nepse_calculator/services/hive.dart';
 import 'package:easy_nepse_calculator/services/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
+import 'package:lottie/lottie.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
 class LanguageSelectionScreen extends StatelessWidget {
@@ -25,11 +30,10 @@ class LanguageSelectionScreen extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20), // Rounded corners
-              child: Image.asset(
-                "assets/icon/subtle_logo.webp",
-                height: 120,
-                width: 120,
-                fit: BoxFit.cover,
+              child: Lottie.asset(
+                'assets/icon/logo_stable_lottie.json',
+                width: 100,
+                height: 100,
               ),
             ),
             SizedBox(
@@ -38,11 +42,17 @@ class LanguageSelectionScreen extends StatelessWidget {
             Text(
               "Select your preferred language.",
               textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+              ),
             ),
             const SizedBox(height: 10),
             Text(
               "आफ्नो मनपर्ने भाषा चयन गर्नुहोस्।",
               textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+              ),
             ),
             const SizedBox(height: 40),
             ElevatedButton(
