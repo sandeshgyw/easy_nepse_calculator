@@ -59,7 +59,8 @@ class LanguageSelectionScreen extends StatelessWidget {
               onPressed: () async {
                 await _themeProvider.setLanguage("English");
                 await hive.setBool("isLanguageSet", true);
-                navigateToPage(context: context, pageName: HomeScreen());
+                navigateWithReplacement(
+                    context: context, pageName: HomeScreen());
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
@@ -72,7 +73,8 @@ class LanguageSelectionScreen extends StatelessWidget {
               onPressed: () async {
                 await _themeProvider.setLanguage("Nepali");
                 await hive.setBool("isLanguageSet", true);
-                navigateToPage(context: context, pageName: HomeScreen());
+                navigateWithReplacement(
+                    context: context, pageName: HomeScreen());
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),

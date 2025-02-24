@@ -2,7 +2,6 @@ import 'package:easy_nepse_calculator/firebase_options.dart';
 import 'package:easy_nepse_calculator/mixins/localization.dart';
 import 'package:easy_nepse_calculator/providers/calculation_provider.dart';
 import 'package:easy_nepse_calculator/providers/theme_provider.dart';
-import 'package:easy_nepse_calculator/screens/language_selector_screen.dart';
 import 'package:easy_nepse_calculator/screens/splash_screen.dart';
 
 import 'package:easy_nepse_calculator/services/hive.dart';

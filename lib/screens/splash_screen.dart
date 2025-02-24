@@ -20,9 +20,10 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Future.delayed(const Duration(seconds: 1)).then((_) {
       if (hive.getBool("isLanguageSet")) {
-        navigateToPage(context: context, pageName: HomeScreen());
+        navigateWithReplacement(context: context, pageName: HomeScreen());
       } else {
-        navigateToPage(context: context, pageName: LanguageSelectionScreen());
+        navigateWithReplacement(
+            context: context, pageName: LanguageSelectionScreen());
       }
     });
   }
