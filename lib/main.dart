@@ -1,8 +1,13 @@
+import 'package:easy_nepse_calculator/firebase_options.dart';
 import 'package:easy_nepse_calculator/mixins/localization.dart';
 import 'package:easy_nepse_calculator/providers/calculation_provider.dart';
 import 'package:easy_nepse_calculator/providers/theme_provider.dart';
+import 'package:easy_nepse_calculator/screens/language_selector_screen.dart';
 import 'package:easy_nepse_calculator/screens/splash_screen.dart';
+
 import 'package:easy_nepse_calculator/services/hive.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,6 +18,8 @@ final FlutterLocalization localization = FlutterLocalization.instance;
 void main() async {
   await hive.init();
   await WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await FirebaseMessaging.instance.requestPermission();
 
   runApp(
     MultiProvider(providers: [
